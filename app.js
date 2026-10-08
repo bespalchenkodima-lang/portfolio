@@ -43,8 +43,6 @@
   const sb = supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
   let allProjects = [];
   let activeTag = "Все";
-  let turnstileWidgetId = null;
-  let turnstileToken = "";
 
   function renderFilters() {
     if (!filtersEl) return;
@@ -200,50 +198,59 @@
     reviewMessage.classList.toggle("success", !!text && !isError);
   }
 
-  function renderTurnstileWhenReady(attempt = 0) {
-    const siteKey = cfg?.TURNSTILE_SITE_KEY;
-    const container = document.getElementById("turnstile-container");
-    if (!container || !siteKey || siteKey.includes("YOUR_TURNSTILE")) {
-      if (reviewSubmit) reviewSubmit.disabled = true;
-      if (container) container.innerHTML = `<p class="security-note">Форма отзывов будет доступна после настройки Turnstile.</p>`;
-      return;
-    }
-    if (!window.turnstile) {
-      if (attempt < 40) setTimeout(() => renderTurnstileWhenReady(attempt + 1), 250);
-      return;
-    }
-    if (turnstileWidgetId !== null) return;
-    turnstileWidgetId = window.turnstile.render(container, {
-      sitekey: siteKey,
-      theme: "dark",
-      callback: (token) => { turnstileToken = token; setReviewMessage(""); },
-      "expired-callback": () => { turnstileToken = ""; },
-      "error-callback": () => { turnstileToken = ""; setReviewMessage("Не удалось загрузить проверку безопасности.", true); }
-    });
+  const REVIEW_COOLDOWN_MS = 60 * 1000;
+
+  function getReviewCooldownRemaining() {
+    const last = Number(localStorage.getItem("portfolio_review_last_submit") || 0);
+    return Math.max(0, REVIEW_COOLDOWN_MS - (Date.now() - last));
   }
 
   reviewForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const nickname = document.getElementById("review-nickname").value.trim();
     const body = document.getElementById("review-text").value.trim();
     const rating = Number(ratingInput.value);
-    if (!turnstileToken) { setReviewMessage("Подтверди, что ты не бот.", true); return; }
+
+    if (nickname.length < 2 || nickname.length > 32) {
+      setReviewMessage("Ник должен быть от 2 до 32 символов.", true);
+      return;
+    }
+    if (body.length < 10 || body.length > 1000) {
+      setReviewMessage("Отзыв должен быть от 10 до 1000 символов.", true);
+      return;
+    }
+    if (!Number.isInteger(rating) || rating < 0 || rating > 5) {
+      setReviewMessage("Выберите оценку от 0 до 5.", true);
+      return;
+    }
+
+    const remaining = getReviewCooldownRemaining();
+    if (remaining > 0) {
+      setReviewMessage(`Подождите ${Math.ceil(remaining / 1000)} сек. перед следующей отправкой.`, true);
+      return;
+    }
+
     reviewSubmit.disabled = true;
     setReviewMessage("Отправляем отзыв...");
+
     try {
-      const { data, error } = await sb.functions.invoke("submit-review", { body: { nickname, body, rating, turnstileToken } });
+      const { data, error } = await sb.rpc("submit_public_review", {
+        p_nickname: nickname,
+        p_body: body,
+        p_rating: rating
+      });
+
       if (error) throw error;
-      if (!data?.success) throw new Error(data?.message || "Не удалось отправить отзыв");
+
+      localStorage.setItem("portfolio_review_last_submit", String(Date.now()));
       reviewForm.reset();
       updateRatingUI(0);
-      turnstileToken = "";
-      if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
       setReviewMessage("Спасибо! Отзыв опубликован.");
       await loadReviews();
     } catch (err) {
+      console.error(err);
       setReviewMessage(err.message || "Не удалось отправить отзыв.", true);
-      if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
-      turnstileToken = "";
     } finally {
       reviewSubmit.disabled = false;
     }
@@ -252,5 +259,4 @@
   loadProjects();
   loadServers();
   loadReviews();
-  renderTurnstileWhenReady();
 })();
