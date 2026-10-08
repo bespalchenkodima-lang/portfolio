@@ -3,7 +3,7 @@ window.PORTFOLIO_CONFIG = {
   SUPABASE_ANON_KEY: "sb_publishable_B9gW2fZHD6tnqyaWSjlzvA_cOpw3eB2",
 
   // Cloudflare Turnstile site key. Нужен для публичной формы отзывов.
-  TURNSTILE_SITE_KEY: "YOUR_TURNSTILE_SITE_KEY",
+  TURNSTILE_SITE_KEY: "0x4AAAAAAFQ3jN8SKdOzu_NJ",
 
   CONTACTS: {
     discord: "#",
