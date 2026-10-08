@@ -6,8 +6,8 @@ window.PORTFOLIO_CONFIG = {
   TURNSTILE_SITE_KEY: "0x4AAAAAAFQ3jN8SKdOzu_NJ",
 
   CONTACTS: {
-    discord: "#",
-    telegram: "#",
-    github: "#"
+    discord: "https://discord.com/users/556821087258935296",
+    telegram: "https://t.me/RustHavenAdmin",
+    vk: "https://m.vk.ru/rusthavenpve"
   }
 };
