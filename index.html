@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dmitry — Rust Development & Server Setup</title>
+  <meta name="description" content="Портфолио Rust-разработчика: плагины, игровые системы, UI, сборка и настройка серверов с нуля." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top">DMITRY<span>.</span></a>
+      <nav class="nav">
+        <a href="#projects">Работы</a>
+        <a href="#services">Услуги</a>
+        <a href="#servers">Серверы</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">RUST • PLUGINS • UI • SERVER SETUP</p>
+          <h1>Создаю игровые системы, плагины и настраиваю Rust-серверы.</h1>
+          <p class="hero-text">
+            Разработка Rust-плагинов, игровых механик и интерфейсов, а также
+            сборка и полная настройка сервера с нуля под ваш проект.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Посмотреть работы</a>
+            <a class="btn btn-secondary" href="#contacts">Обсудить проект</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <span class="status-dot"></span>
+            <span>PORTFOLIO ONLINE</span>
+          </div>
+          <div class="hero-card-code">
+            <span>01</span><b>Rust Plugins</b>
+            <span>02</span><b>Game Systems</b>
+            <span>03</span><b>Custom UI</b>
+            <span>04</span><b>Server Setup</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SELECTED WORK</p>
+            <h2>Мои работы</h2>
+          </div>
+          <div id="filters" class="filters"></div>
+        </div>
+
+        <div id="projects-grid" class="projects-grid">
+          <div class="loading-card">Загрузка проектов...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="services">
+      <div class="container">
+        <div class="section-head services-head">
+          <div>
+            <p class="eyebrow">SERVICES</p>
+            <h2>Что можно заказать</h2>
+          </div>
+          <p class="section-lead">От отдельного плагина до полностью подготовленного к запуску Rust-сервера.</p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card">
+            <span class="service-number">01</span>
+            <h3>Разработка плагинов</h3>
+            <p>Индивидуальные механики, события, экономика, боссы, интеграции и серверные системы под конкретную задачу.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-number">02</span>
+            <h3>UI / CUI</h3>
+            <p>Кастомные интерфейсы для Rust: HUD, меню, окна событий, панели статистики и другие элементы.</p>
+          </article>
+          <article class="service-card featured-service">
+            <span class="service-number">03</span>
+            <h3>Сервер с нуля</h3>
+            <p>Сборка и настройка Rust-сервера с нуля: плагины, конфиги, права, баланс, игровые системы и подготовка к запуску.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servers">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">EXPERIENCE</p>
+            <h2>С какими серверами я работал</h2>
+          </div>
+        </div>
+        <div id="servers-grid" class="servers-grid">
+          <div class="loading-card">Загрузка...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="about">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">ABOUT</p>
+          <h2>Обо мне</h2>
+        </div>
+        <div class="about-copy">
+          <p>
+            Занимаюсь разработкой игровых систем, серверных плагинов и интерфейсов для Rust.
+            Люблю превращать идеи в законченные игровые механики и удобные инструменты.
+          </p>
+          <p>
+            Основные направления: Rust / Oxide / C#, игровые UI, серверная автоматизация,
+            настройка и сборка серверов под ключ.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reviews">
+      <div class="container">
+        <div class="section-head reviews-head">
+          <div>
+            <p class="eyebrow">REVIEWS</p>
+            <h2>Отзывы</h2>
+          </div>
+          <div id="reviews-summary" class="reviews-summary"></div>
+        </div>
+
+        <div class="reviews-layout">
+          <div>
+            <div id="reviews-list" class="reviews-list">
+              <div class="loading-card">Загрузка отзывов...</div>
+            </div>
+          </div>
+
+          <aside class="review-form-card">
+            <p class="eyebrow">LEAVE A REVIEW</p>
+            <h3>Оставить отзыв</h3>
+            <p class="review-note">Регистрация не нужна. Отправляя отзыв, не указывайте личные данные.</p>
+
+            <form id="review-form" class="form-stack">
+              <label>
+                Ник
+                <input id="review-nickname" type="text" minlength="2" maxlength="32" required placeholder="Ваш ник" autocomplete="nickname" />
+              </label>
+
+              <fieldset class="rating-fieldset">
+                <legend>Оценка</legend>
+                <div id="rating-picker" class="rating-picker" aria-label="Оценка от 0 до 5">
+                  <button type="button" class="rating-zero active" data-rating="0">0</button>
+                  <button type="button" data-rating="1" aria-label="1 звезда">★</button>
+                  <button type="button" data-rating="2" aria-label="2 звезды">★</button>
+                  <button type="button" data-rating="3" aria-label="3 звезды">★</button>
+                  <button type="button" data-rating="4" aria-label="4 звезды">★</button>
+                  <button type="button" data-rating="5" aria-label="5 звёзд">★</button>
+                </div>
+                <input id="review-rating" type="hidden" value="0" />
+              </fieldset>
+
+              <label>
+                Отзыв
+                <textarea id="review-text" rows="6" minlength="10" maxlength="1000" required placeholder="Расскажите о своём опыте работы со мной"></textarea>
+              </label>
+
+              <div id="turnstile-container" class="turnstile-container"></div>
+              <button id="review-submit" class="btn btn-primary" type="submit">Опубликовать отзыв</button>
+              <p id="review-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contacts">
+      <div class="container contact-card">
+        <div>
+          <p class="eyebrow">CONTACT</p>
+          <h2>Есть проект?</h2>
+          <p>Нужен плагин, игровая система или сервер под ключ — свяжитесь со мной удобным способом.</p>
+        </div>
+        <div class="contact-links">
+          <a href="#" data-contact="discord">Discord</a>
+          <a href="#" data-contact="telegram">Telegram</a>
+          <a href="#" data-contact="github">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <span>© <span id="year"></span> Dmitry</span>
+      <span>Rust Development</span>
+    </div>
+  </footer>
+
+  <div id="project-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-panel">
+      <button class="modal-close" data-close-modal aria-label="Закрыть">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

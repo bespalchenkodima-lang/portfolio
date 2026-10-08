@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Portfolio Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="admin-body">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">DMITRY<span>.</span></a>
+      <div class="nav">
+        <a href="index.html">На сайт</a>
+        <button id="logout-btn" class="link-button hidden">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main container">
+    <section id="login-view" class="admin-card auth-card">
+      <p class="eyebrow">ADMIN ACCESS</p>
+      <h1>Вход</h1>
+      <form id="login-form" class="form-stack">
+        <label>Email<input id="login-email" type="email" required autocomplete="email" /></label>
+        <label>Пароль<input id="login-password" type="password" required autocomplete="current-password" /></label>
+        <button class="btn btn-primary" type="submit">Войти</button>
+        <p id="login-message" class="form-message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="admin-view" class="hidden">
+      <div class="admin-header">
+        <div>
+          <p class="eyebrow">PORTFOLIO CMS</p>
+          <h1>Панель управления</h1>
+        </div>
+      </div>
+
+      <div class="admin-tabs" role="tablist">
+        <button class="admin-tab active" data-admin-tab="projects">Работы</button>
+        <button class="admin-tab" data-admin-tab="reviews">Отзывы</button>
+        <button class="admin-tab" data-admin-tab="servers">Серверы</button>
+      </div>
+
+      <section class="admin-tab-panel" data-admin-panel="projects">
+        <div class="admin-panel-heading">
+          <h2>Работы</h2>
+          <button id="new-project-btn" class="btn btn-primary">+ Новая работа</button>
+        </div>
+        <div class="admin-grid">
+          <section class="admin-card">
+            <h2 id="form-title">Новая работа</h2>
+            <form id="project-form" class="form-stack">
+              <input id="project-id" type="hidden" />
+              <label>Название<input id="title" type="text" maxlength="120" required placeholder="Например: Торговая площадь" /></label>
+              <label>Короткое описание<textarea id="short-description" rows="3" maxlength="350" required placeholder="1–3 предложения для карточки"></textarea></label>
+              <label>Полное описание<textarea id="description" rows="8" maxlength="5000" placeholder="Подробно расскажи о проекте"></textarea></label>
+              <label>Теги<input id="tags" type="text" maxlength="250" placeholder="Rust, C#, Oxide, UI" /><small>Через запятую</small></label>
+              <label>Главная картинка<input id="cover-file" type="file" accept="image/jpeg,image/png,image/webp" /></label>
+              <div id="current-cover" class="current-media"></div>
+              <label>Дополнительные скриншоты<input id="gallery-files" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
+              <div id="current-gallery" class="current-gallery"></div>
+              <label class="check-row"><input id="published" type="checkbox" checked /><span>Опубликовать на сайте</span></label>
+              <div class="form-actions">
+                <button id="save-btn" class="btn btn-primary" type="submit">Сохранить</button>
+                <button id="cancel-edit-btn" class="btn btn-secondary hidden" type="button">Отмена</button>
+              </div>
+              <p id="project-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="admin-card">
+            <div class="admin-list-head"><h2>Все работы</h2><button id="refresh-btn" class="mini-btn">Обновить</button></div>
+            <div id="admin-projects-list" class="admin-projects-list"><div class="loading-card">Загрузка...</div></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-tab-panel hidden" data-admin-panel="reviews">
+        <div class="admin-panel-heading">
+          <div>
+            <h2>Отзывы</h2>
+            <p class="admin-help">Можно удалять/скрывать отзывы посетителей и добавлять полученные вами отзывы вручную. Добавленные вручную отзывы на сайте помечаются как добавленные владельцем.</p>
+          </div>
+          <button id="refresh-reviews-btn" class="mini-btn">Обновить</button>
+        </div>
+
+        <div class="admin-grid">
+          <section class="admin-card">
+            <h2>Добавить отзыв вручную</h2>
+            <form id="manual-review-form" class="form-stack">
+              <label>Ник автора<input id="manual-review-nickname" type="text" minlength="2" maxlength="32" required placeholder="Ник автора отзыва" /></label>
+              <label>Источник<input id="manual-review-source" type="text" maxlength="80" placeholder="Например: Discord (необязательно)" /></label>
+              <label>Оценка
+                <select id="manual-review-rating" class="select-input">
+                  <option value="0">0 звёзд</option><option value="1">1 звезда</option><option value="2">2 звезды</option>
+                  <option value="3">3 звезды</option><option value="4">4 звезды</option><option value="5" selected>5 звёзд</option>
+                </select>
+              </label>
+              <label>Текст<textarea id="manual-review-text" rows="7" minlength="10" maxlength="1000" required></textarea></label>
+              <button class="btn btn-primary" type="submit">Добавить</button>
+              <p id="manual-review-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="admin-card">
+            <div id="admin-reviews-list" class="admin-projects-list"><div class="loading-card">Загрузка...</div></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="admin-tab-panel hidden" data-admin-panel="servers">
+        <div class="admin-panel-heading">
+          <div><h2>Серверы</h2><p class="admin-help">Добавляй проекты/серверы, с которыми ты работал.</p></div>
+          <button id="refresh-servers-btn" class="mini-btn">Обновить</button>
+        </div>
+
+        <div class="admin-grid">
+          <section class="admin-card">
+            <h2>Добавить сервер</h2>
+            <form id="server-form" class="form-stack">
+              <input id="server-id" type="hidden" />
+              <label>Название<input id="server-name" type="text" maxlength="100" required placeholder="Название сервера / проекта" /></label>
+              <label>Что делал<textarea id="server-description" rows="5" maxlength="700" placeholder="Коротко опиши свою работу"></textarea></label>
+              <label>Ссылка<input id="server-url" type="url" maxlength="300" placeholder="https://... (необязательно)" /></label>
+              <label>Порядок<input id="server-sort-order" type="number" min="0" max="9999" value="0" /></label>
+              <label class="check-row"><input id="server-published" type="checkbox" checked /><span>Показывать на сайте</span></label>
+              <div class="form-actions">
+                <button id="server-save-btn" class="btn btn-primary" type="submit">Сохранить</button>
+                <button id="server-cancel-btn" class="btn btn-secondary hidden" type="button">Отмена</button>
+              </div>
+              <p id="server-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="admin-card"><div id="admin-servers-list" class="admin-projects-list"><div class="loading-card">Загрузка...</div></div></section>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
