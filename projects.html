@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Все работы — DD-DEV</title>
+  <meta name="description" content="Все проекты DD-DEV: Rust-плагины, игровые системы, UI и серверные решения." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-project-page="all">
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">DD-DEV<span>.</span></a>
+      <nav class="nav">
+        <a href="index.html#projects">Работы</a>
+        <a href="index.html#services">Услуги</a>
+        <a href="index.html#servers">Серверы</a>
+        <a href="index.html#reviews">Отзывы</a>
+        <a href="index.html#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="projects-page-hero">
+      <div class="container">
+        <p class="eyebrow">PORTFOLIO</p>
+        <h1>Все работы</h1>
+        <p>Здесь собраны все опубликованные проекты. Используйте фильтры, чтобы быстро найти нужное направление.</p>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">ALL PROJECTS</p>
+            <h2>Проекты</h2>
+          </div>
+          <div id="filters" class="filters"></div>
+        </div>
+
+        <div id="projects-grid" class="projects-grid">
+          <div class="loading-card">Загрузка проектов...</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-row">
+      <span>© <span id="year"></span> DD-DEV</span>
+      <a href="index.html">← На главную</a>
+    </div>
+  </footer>
+
+  <div id="project-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-panel">
+      <button class="modal-close" data-close-modal aria-label="Закрыть">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

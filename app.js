@@ -59,7 +59,8 @@
 
   function renderProjects() {
     if (!grid) return;
-    const projects = activeTag === "Все" ? allProjects : allProjects.filter((p) => (p.tags || []).includes(activeTag));
+    let projects = activeTag === "Все" ? allProjects : allProjects.filter((p) => (p.tags || []).includes(activeTag));
+    if (document.body.dataset.projectPage === "home") projects = projects.slice(0, 3);
     if (!projects.length) {
       grid.innerHTML = `<div class="empty-state"><h3>Работ пока нет</h3><p>Скоро здесь появятся проекты.</p></div>`;
       return;
@@ -171,7 +172,7 @@
     reviewsList.innerHTML = reviews.map((review) => `
       <article class="review-card">
         <div class="review-card-head">
-          <div><h3>${escapeHtml(review.nickname)}</h3>${review.owner_added ? `<span class="owner-added-label">Добавлено владельцем${review.source_label ? ` · ${escapeHtml(review.source_label)}` : ""}</span>` : ""}</div>
+          <div><h3>${escapeHtml(review.nickname)}</h3>${review.source_label ? `<span class="review-source-label">${escapeHtml(review.source_label)}</span>` : ""}</div>
           ${stars(review.rating)}
         </div>
         <p>${escapeHtml(review.body)}</p>
