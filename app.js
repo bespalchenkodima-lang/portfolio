@@ -261,3 +261,258 @@
   loadServers();
   loadReviews();
 })();
+
+/* =========================================================
+   DD-DEV animated code background
+   Decorative only: creates itself on pages that load app.js.
+   ========================================================= */
+(() => {
+  if (document.querySelector('.dev-code-bg')) return;
+
+  const codePool = [
+    'using Oxide.Core;',
+    'using Oxide.Core.Plugins;',
+    'using UnityEngine;',
+    'using Newtonsoft.Json;',
+    'using System.Collections.Generic;',
+    'public class DDDev : RustPlugin { }',
+    '[Info("DD-DEV Core", "DD-DEV", "1.0.0")]',
+    'private const string PermAdmin = "dddev.admin";',
+    'permission.RegisterPermission(PermAdmin, this);',
+    'Interface.CallHook("OnServerInitialized");',
+    'void OnServerInitialized() => InitializeSystems();',
+    'void OnServerSave() => SaveData();',
+    'void Unload() => DestroyAllUI();',
+    'void OnPlayerConnected(BasePlayer player) => LoadPlayerData(player);',
+    'void OnPlayerDisconnected(BasePlayer player, string reason) => SavePlayerData(player.userID);',
+    'if (player == null || !player.IsConnected) return;',
+    'if (!permission.UserHasPermission(player.UserIDString, PermAdmin)) return;',
+    'var online = BasePlayer.activePlayerList.Count;',
+    'var sleepers = BasePlayer.sleepingPlayerList.Count;',
+    'BasePlayer player = BasePlayer.FindByID(userId);',
+    'BasePlayer player = BasePlayer.FindAwakeOrSleeping(userId.ToString());',
+    'timer.Once(1f, () => RefreshHUD(player));',
+    'timer.Every(60f, () => SaveServerStats());',
+    'timer.Repeat(5f, 0, () => UpdateEvents());',
+    'NextTick(() => DrawInterface(player));',
+    'ServerMgr.Instance.Invoke(() => SaveData(), 0.1f);',
+    'Puts($"Online players: {BasePlayer.activePlayerList.Count}");',
+    'PrintWarning("Configuration updated successfully");',
+    'PrintError("Unable to load requested module");',
+    'Config.WriteObject(config, true);',
+    'config = Config.ReadObject<PluginConfig>();',
+    'DataFileSystem.WriteObject(Name, storedData);',
+    'storedData = Interface.Oxide.DataFileSystem.ReadObject<StoredData>(Name);',
+    'Dictionary<ulong, PlayerData> players = new Dictionary<ulong, PlayerData>();',
+    'HashSet<ulong> activeUsers = new HashSet<ulong>();',
+    'List<BasePlayer> targets = BasePlayer.activePlayerList;',
+    'private readonly Dictionary<string, Timer> activeTimers = new();',
+    'var position = player.transform.position;',
+    'var distance = Vector3.Distance(player.transform.position, target.transform.position);',
+    'if (distance > config.MaxDistance) return;',
+    'player.ChatMessage("Система успешно загружена");',
+    'SendReply(player, "Команда выполнена");',
+    'ConsoleSystem.Run(ConsoleSystem.Option.Server, "server.save");',
+    'ConsoleSystem.Run(ConsoleSystem.Option.Server, "weather.clear");',
+    'covalence.Server.Command("server.save");',
+    'cmd.AddChatCommand("menu", this, nameof(CommandMenu));',
+    'cmd.AddConsoleCommand("dddev.reload", this, nameof(ConsoleReload));',
+    '[ChatCommand("stats")]',
+    '[ConsoleCommand("dddev.ui.close")]',
+    'CuiHelper.DestroyUi(player, "DDDev.Main");',
+    'CuiHelper.AddUi(player, container);',
+    'var container = new CuiElementContainer();',
+    'container.Add(new CuiPanel { Image = { Color = "0.08 0.10 0.12 0.96" } });',
+    'container.Add(new CuiLabel { Text = { Text = title, FontSize = 16 } });',
+    'container.Add(new CuiButton { Button = { Command = "dddev.open" } });',
+    'plugins.Find("ImageLibrary")?.Call("AddImage", imageUrl, imageName);',
+    'plugins.Find("Economics")?.Call("Deposit", player.userID, amount);',
+    'plugins.Find("ServerRewards")?.Call("AddPoints", player.userID, points);',
+    'object balance = Economics?.Call("Balance", player.userID);',
+    '[PluginReference] private Plugin ImageLibrary, Economics, Kits;',
+    'webrequest.Enqueue(url, null, HandleResponse, this);',
+    'webrequest.EnqueueGet(apiUrl, (code, response) => ProcessApi(code, response), this);',
+    'if (code != 200 || string.IsNullOrEmpty(response)) return;',
+    'var payload = JsonConvert.DeserializeObject<ApiResponse>(response);',
+    'string json = JsonConvert.SerializeObject(data, Formatting.Indented);',
+    'private void Broadcast(string message) => Server.Broadcast(message);',
+    'Server.Broadcast("Событие началось. Удачи!");',
+    'Effect.server.Run(effectPrefab, position);',
+    'EffectNetwork.Send(new Effect(effectPrefab, player, 0, Vector3.zero, Vector3.forward));',
+    'entity.Kill(BaseNetworkable.DestroyMode.None);',
+    'var entity = GameManager.server.CreateEntity(prefab, position, rotation);',
+    'entity?.Spawn();',
+    'item.MoveToContainer(player.inventory.containerMain);',
+    'Item item = ItemManager.CreateByName(shortname, amount);',
+    'player.inventory.GiveItem(item);',
+    'player.health = Mathf.Clamp(player.health + healAmount, 0f, player.MaxHealth());',
+    'if (player.IsDead() || player.IsWounded()) return;',
+    'player.Teleport(destination);',
+    'player.SetPlayerFlag(BasePlayer.PlayerFlags.SafeZone, true);',
+    'private bool IsAdmin(BasePlayer player) => player.IsAdmin || HasPermission(player);',
+    'private bool HasPermission(BasePlayer player) => permission.UserHasPermission(player.UserIDString, PermAdmin);',
+    'private string Lang(string key, string id) => lang.GetMessage(key, this, id);',
+    'lang.RegisterMessages(messages, this, "ru");',
+    'lang.RegisterMessages(messagesEn, this, "en");',
+    'private void SaveServerStats() { stats.LastSave = DateTime.UtcNow; SaveData(); }',
+    'private void UpdateEconomy() { market.RefreshPrices(); market.Save(); }',
+    'private void StartEvent() { eventActive = true; Broadcast(config.EventStarted); }',
+    'private void StopEvent() { eventActive = false; CleanupEntities(); }',
+    'private void InitializeSystems() { LoadConfig(); LoadData(); RegisterCommands(); }',
+    'private void RegisterCommands() { AddCovalenceCommand("dd", nameof(CommandDD)); }',
+    'private void RefreshHUD(BasePlayer player) { DestroyHUD(player); DrawHUD(player); }',
+    'private void CleanupEntities() => spawnedEntities.RemoveAll(x => x == null || x.IsDestroyed);',
+    'server.hostname "DD-DEV | Custom Rust Server";',
+    'server.maxplayers 250;',
+    'server.secure true;',
+    'server.saveinterval 300;',
+    'server.worldsize 3500;',
+    'server.seed 123456;',
+    'decay.scale 1.0;',
+    'craft.instant false;',
+    'chat.enabled true;',
+    'oxide.reload DDDevCore;',
+    'oxide.reload CustomHUD;',
+    'oxide.reload BossSystem;',
+    'oxide.reload ServerEvents;',
+    'oxide.reload EconomyCore;',
+    'oxide.unload DebugModule;',
+    'oxide.plugins;',
+    'o.reload DDDevCore;',
+    'o.reload CustomHUD;',
+    'o.reload EventManager;',
+    'fps.limit 120;',
+    'server.writecfg;',
+    'global.status;',
+    'global.players;',
+    'global.say "Server maintenance completed";',
+    'if (DateTime.UtcNow >= nextRestart) ScheduleRestart();',
+    'TimeSpan uptime = DateTime.UtcNow - serverStartedAt;',
+    'var session = sessions.GetValueOrDefault(player.userID);',
+    'session.PlayTime += TimeSpan.FromSeconds(1);',
+    'stats.TotalConnections++;',
+    'stats.PeakOnline = Math.Max(stats.PeakOnline, online);',
+    'cache[player.userID] = new PlayerCache { UpdatedAt = DateTime.UtcNow };',
+    'await Task.Delay(250);',
+    'CancellationTokenSource refreshToken = new CancellationTokenSource();',
+    'queue.Enqueue(new ServerTask("SavePlayer", player.userID));',
+    'while (queue.Count > 0) ProcessTask(queue.Dequeue());',
+    'switch (eventType) { case EventType.Boss: StartBossEvent(); break; }',
+    'return result.Success ? Result.Ok() : Result.Fail(result.Error);',
+    'Logger.Info($"[{Name}] module ready in {elapsed} ms");',
+    'Metrics.Set("players.online", BasePlayer.activePlayerList.Count);',
+    'Metrics.Increment("events.completed");',
+    'Cache.RemoveExpired(DateTime.UtcNow);',
+    'RateLimiter.Allow(player.UserIDString, "command", 3, TimeSpan.FromSeconds(5));',
+    'Audit.Log(player.UserIDString, "admin.action", actionName);',
+    'Permissions.Sync(player.UserIDString);',
+    'Database.Enqueue(() => repository.Save(profile));',
+    'repository.UpdateLastSeen(player.userID, DateTime.UtcNow);',
+    'economy.Transfer(sender.userID, receiver.userID, amount);',
+    'market.SetPrice(itemId, Math.Round(basePrice * multiplier, 2));',
+    'eventBus.Publish(new PlayerJoinedEvent(player.userID));',
+    'eventBus.Subscribe<ServerReadyEvent>(_ => WarmupCaches());',
+    'scheduler.Schedule("daily-restart", restartAt, RestartServer);',
+    'scheduler.Cancel("expired-event");',
+    'ui.Open(player, "main-menu");',
+    'ui.Close(player, "main-menu");',
+    'ui.Update(player, "online-count", online.ToString());',
+    'localization.Get("welcome.message", player.UserIDString);',
+    'config.AutoSave = true;',
+    'config.Features.CustomHud = true;',
+    'config.Features.DynamicEvents = true;',
+    'config.Security.AdminPermission = "dddev.admin";',
+    'config.Economy.StartBalance = 1000;',
+    'config.Restart.WarningMinutes = new[] { 30, 15, 5, 1 };',
+    'JsonConvert.PopulateObject(rawConfig, config);',
+    'File.WriteAllText(path, JsonConvert.SerializeObject(config));',
+    'if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);',
+    'try { LoadModules(); } catch (Exception ex) { PrintError(ex.Message); }',
+    'finally { initializationLock = false; }',
+    'Debug.Log("DD-DEV background service started");',
+    'Application.logMessageReceived += HandleUnityLog;',
+    'Rust.Application.isLoading = false;',
+    'Performance.report.frameRate;',
+    'Net.sv.write.Start();',
+    'SaveRestore.Save(true);',
+    'RelationshipManager.ServerInstance.playerToTeam.TryGetValue(player.userID, out var team);',
+    'Vis.Entities(position, radius, entities, Rust.Layers.Mask.Player_Server);',
+    'Physics.Raycast(ray, out RaycastHit hit, maxDistance);',
+    'Quaternion rotation = Quaternion.Euler(0f, yaw, 0f);',
+    'Vector3 spawnPoint = FindSafePosition(origin);',
+    'Mathf.Lerp(currentValue, targetValue, Time.deltaTime * smoothSpeed);'
+  ];
+
+  const layer = document.createElement('div');
+  layer.className = 'dev-code-bg';
+  layer.setAttribute('aria-hidden', 'true');
+
+  const rowCount = window.innerWidth < 700 ? 7 : 11;
+
+  function shuffledPool() {
+    const list = [...codePool];
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  }
+
+  let bag = shuffledPool();
+  let bagIndex = 0;
+
+  function nextSnippets(count) {
+    const result = [];
+    while (result.length < count) {
+      if (bagIndex >= bag.length) {
+        bag = shuffledPool();
+        bagIndex = 0;
+      }
+      result.push(bag[bagIndex++]);
+    }
+    return result;
+  }
+
+  function makeCodeText(rowIndex) {
+    const count = window.innerWidth < 700 ? 6 : 10;
+    const lines = nextSnippets(count);
+    const prefixes = ['// CORE', '// SERVER', '// OXIDE', '// RUNTIME', '// DD-DEV'];
+    return `${prefixes[rowIndex % prefixes.length]}   ${lines.join('    //    ')}    //    `;
+  }
+
+  function fillTrack(track, rowIndex) {
+    const text = makeCodeText(rowIndex);
+    track.replaceChildren();
+    for (let i = 0; i < 2; i++) {
+      const span = document.createElement('span');
+      span.className = 'dev-code-copy';
+      span.textContent = text;
+      track.appendChild(span);
+    }
+  }
+
+  for (let i = 0; i < rowCount; i++) {
+    const row = document.createElement('div');
+    row.className = `dev-code-row ${i % 2 ? 'dev-code-row--reverse' : ''}`;
+    row.style.top = `${4 + (i * 92 / Math.max(1, rowCount - 1))}%`;
+    row.style.setProperty('--code-duration', `${58 + (i % 5) * 11 + Math.random() * 9}s`);
+    row.style.setProperty('--code-delay', `${-(Math.random() * 45)}s`);
+    row.style.setProperty('--code-opacity', `${0.11 + (i % 4) * 0.018}`);
+
+    const track = document.createElement('div');
+    track.className = 'dev-code-track';
+    fillTrack(track, i);
+    row.appendChild(track);
+    layer.appendChild(row);
+
+    // Change the actual code after every completed pass so the background
+    // does not repeat one permanent strip forever.
+    track.addEventListener('animationiteration', () => fillTrack(track, i));
+  }
+
+  const glow = document.createElement('div');
+  glow.className = 'dev-code-glow';
+  layer.appendChild(glow);
+
+  document.body.prepend(layer);
+})();

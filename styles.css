@@ -1072,3 +1072,149 @@ input[type="file"] {
     white-space: nowrap;
   }
 }
+
+/* =========================================================
+   DD-DEV animated developer background
+   ========================================================= */
+.dev-code-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: strict;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(88, 132, 105, 0.055), transparent 29rem),
+    radial-gradient(circle at 88% 8%, rgba(255, 122, 26, 0.035), transparent 34rem),
+    radial-gradient(circle at 50% 100%, rgba(64, 94, 77, 0.04), transparent 38rem);
+}
+
+.dev-code-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background:
+    linear-gradient(90deg, rgba(11, 13, 16, 0.86) 0%, transparent 10%, transparent 90%, rgba(11, 13, 16, 0.86) 100%),
+    linear-gradient(180deg, rgba(11, 13, 16, 0.25), transparent 22%, transparent 78%, rgba(11, 13, 16, 0.25));
+}
+
+.dev-code-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0.12;
+  background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 100% 4px;
+  mix-blend-mode: soft-light;
+}
+
+.dev-code-row {
+  position: absolute;
+  left: -3vw;
+  width: 106vw;
+  overflow: hidden;
+  opacity: var(--code-opacity, 0.13);
+  transform: translateY(-50%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.dev-code-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: dddev-code-scroll var(--code-duration, 70s) linear var(--code-delay, 0s) infinite;
+}
+
+.dev-code-row--reverse .dev-code-track {
+  animation-name: dddev-code-scroll-reverse;
+}
+
+.dev-code-copy {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-right: 4.5rem;
+  font-family: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+  font-size: clamp(11px, 0.82vw, 14px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.012em;
+  color: rgb(117, 154, 129);
+  text-shadow: 0 0 11px rgba(84, 137, 101, 0.08);
+}
+
+.dev-code-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(ellipse at 25% 30%, rgba(99, 145, 112, 0.04), transparent 28%),
+    radial-gradient(ellipse at 75% 70%, rgba(82, 128, 98, 0.035), transparent 30%);
+  animation: dddev-code-glow 14s ease-in-out infinite alternate;
+}
+
+@keyframes dddev-code-scroll {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes dddev-code-scroll-reverse {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes dddev-code-glow {
+  0%   { opacity: 0.45; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.06); }
+}
+
+/* Keep the animated layer behind the actual site. */
+body > .site-header,
+body > main,
+body > .footer,
+body > .modal {
+  position: relative;
+  z-index: 1;
+}
+
+body > .site-header {
+  z-index: 40;
+}
+
+body > .modal {
+  z-index: 100;
+}
+
+/* Let a little of the animated background breathe through muted sections. */
+.section-muted {
+  background: rgba(17, 21, 26, 0.91);
+  backdrop-filter: blur(1.5px);
+}
+
+/* Slightly soften the black base so the page feels less flat and gloomy. */
+body {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(255, 122, 26, 0.085), transparent 34rem),
+    radial-gradient(circle at 15% 35%, rgba(79, 117, 91, 0.055), transparent 30rem),
+    linear-gradient(180deg, #0d1115 0%, #10151a 48%, #0c1014 100%);
+}
+
+@media (max-width: 700px) {
+  .dev-code-copy {
+    font-size: 10px;
+  }
+
+  .dev-code-row {
+    opacity: calc(var(--code-opacity, 0.13) * 0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev-code-track,
+  .dev-code-glow {
+    animation: none !important;
+  }
+}
