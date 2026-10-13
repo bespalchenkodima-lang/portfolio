@@ -57,10 +57,103 @@
     }));
   }
 
-  function renderProjects() {
-    if (!grid) return;
+  let quickViewEl = null;
+  let lastProjectTrigger = null;
+
+  function getVisibleProjects() {
     let projects = activeTag === "Все" ? allProjects : allProjects.filter((p) => (p.tags || []).includes(activeTag));
     if (document.body.dataset.projectPage === "home") projects = projects.slice(0, 3);
+    return projects;
+  }
+
+  function ensureQuickView() {
+    if (quickViewEl || !grid) return quickViewEl;
+    quickViewEl = document.createElement("div");
+    quickViewEl.id = "project-quickview";
+    quickViewEl.className = "project-quickview";
+    quickViewEl.hidden = true;
+    grid.parentNode.insertBefore(quickViewEl, grid);
+    return quickViewEl;
+  }
+
+  function closeQuickView({ returnToCard = true } = {}) {
+    if (!quickViewEl || quickViewEl.hidden) return;
+    quickViewEl.hidden = true;
+    quickViewEl.innerHTML = "";
+    document.querySelectorAll(".project-card.is-selected").forEach((card) => card.classList.remove("is-selected"));
+    if (returnToCard && lastProjectTrigger) {
+      const card = lastProjectTrigger.closest(".project-card");
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  function renderQuickView(projectId, { scrollIntoView = true } = {}) {
+    const project = allProjects.find((item) => String(item.id) === String(projectId));
+    if (!project) return;
+
+    const visibleProjects = getVisibleProjects();
+    const currentIndex = Math.max(0, visibleProjects.findIndex((item) => String(item.id) === String(project.id)));
+    const prevProject = currentIndex > 0 ? visibleProjects[currentIndex - 1] : null;
+    const nextProject = currentIndex >= 0 && currentIndex + 1 < visibleProjects.length ? visibleProjects[currentIndex + 1] : null;
+    const gallery = [project.cover_url, ...(Array.isArray(project.gallery_urls) ? project.gallery_urls : [])]
+      .filter(Boolean)
+      .filter((url, index, arr) => arr.indexOf(url) === index);
+
+    const view = ensureQuickView();
+    if (!view) return;
+    view.hidden = false;
+    view.innerHTML = `
+      <article class="project-quickview-card" data-open-project-id="${escapeHtml(String(project.id))}">
+        <div class="project-quickview-top">
+          <div>
+            <p class="eyebrow">PROJECT DETAILS</p>
+            <h2>${escapeHtml(project.title)}</h2>
+          </div>
+          <button class="project-quickview-close" type="button" aria-label="Закрыть">✕</button>
+        </div>
+
+        <div class="project-quickview-layout">
+          <div class="project-quickview-media">
+            ${gallery.length ? `<div class="gallery-main project-quickview-main"><img id="quickview-main-image" src="${escapeHtml(gallery[0])}" alt="${escapeHtml(project.title)}" decoding="async"></div>` : `<div class="project-placeholder project-quickview-placeholder">NO IMAGE</div>`}
+            ${gallery.length > 1 ? `<div class="gallery-thumbs">${gallery.map((url, i) => `<button class="gallery-thumb ${i === 0 ? "active" : ""}" data-qv-image="${escapeHtml(url)}" type="button"><img src="${escapeHtml(url)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>` : ""}
+          </div>
+
+          <div class="project-quickview-copy">
+            <div class="tags">${(project.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
+            <div class="project-description">${(project.description || project.short_description || "").split("\n").filter(Boolean).map((line) => `<p>${escapeHtml(line)}</p>`).join("")}</div>
+            <a class="project-direct-link" href="project.html?id=${encodeURIComponent(String(project.id))}">Открыть отдельной страницей ↗</a>
+          </div>
+        </div>
+
+        <div class="project-quickview-nav">
+          <button type="button" data-qv-prev ${prevProject ? `data-project-id="${escapeHtml(String(prevProject.id))}"` : "disabled"}>← Предыдущая</button>
+          <span>${visibleProjects.length ? `${currentIndex + 1} / ${visibleProjects.length}` : ""}</span>
+          <button type="button" data-qv-next ${nextProject ? `data-project-id="${escapeHtml(String(nextProject.id))}"` : "disabled"}>Следующая →</button>
+        </div>
+      </article>
+    `;
+
+    document.querySelectorAll(".project-card.is-selected").forEach((card) => card.classList.remove("is-selected"));
+    document.querySelector(`.project-card[data-project-id="${CSS.escape(String(project.id))}"]`)?.classList.add("is-selected");
+
+    const mainImage = view.querySelector("#quickview-main-image");
+    view.querySelectorAll("[data-qv-image]").forEach((btn) => btn.addEventListener("click", () => {
+      if (mainImage) mainImage.src = btn.dataset.qvImage;
+      view.querySelectorAll(".gallery-thumb").forEach((x) => x.classList.remove("active"));
+      btn.classList.add("active");
+    }));
+
+    view.querySelector(".project-quickview-close")?.addEventListener("click", () => closeQuickView({ returnToCard: true }));
+    view.querySelector("[data-qv-prev]:not([disabled])")?.addEventListener("click", (event) => renderQuickView(event.currentTarget.dataset.projectId, { scrollIntoView: false }));
+    view.querySelector("[data-qv-next]:not([disabled])")?.addEventListener("click", (event) => renderQuickView(event.currentTarget.dataset.projectId, { scrollIntoView: false }));
+
+    if (scrollIntoView) view.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderProjects() {
+    if (!grid) return;
+    const projects = getVisibleProjects();
+    closeQuickView({ returnToCard: false });
     if (!projects.length) {
       grid.innerHTML = `<div class="empty-state"><h3>Работ пока нет</h3><p>Скоро здесь появятся проекты.</p></div>`;
       return;
@@ -74,10 +167,15 @@
           <div class="tags">${(project.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
           <h3>${escapeHtml(project.title)}</h3>
           <p>${escapeHtml(project.short_description || "")}</p>
-          <a class="project-open" href="project.html?id=${encodeURIComponent(String(project.id))}">Подробнее →</a>
+          <button class="project-open" type="button" data-project-open="${escapeHtml(String(project.id))}">Подробнее →</button>
         </div>
       </article>
     `).join("");
+
+    grid.querySelectorAll("[data-project-open]").forEach((btn) => btn.addEventListener("click", () => {
+      lastProjectTrigger = btn;
+      renderQuickView(btn.dataset.projectOpen, { scrollIntoView: true });
+    }));
   }
 
   async function loadProjects() {

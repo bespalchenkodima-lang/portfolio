@@ -1315,3 +1315,138 @@ body {
   .project-detail-page { padding-top: 28px; }
   .project-detail-card { border-radius: 18px; }
 }
+
+/* =========================================================
+   Lightweight inline project viewer
+   Keeps the user on the portfolio page without a modal/overlay.
+   ========================================================= */
+.project-quickview[hidden] { display: none !important; }
+.project-quickview {
+  scroll-margin-top: 106px;
+  margin: 10px 0 34px;
+}
+.project-quickview-card {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 24px;
+  padding: clamp(20px, 3vw, 34px);
+  background:
+    radial-gradient(circle at 92% 10%, rgba(255,122,26,.05), transparent 22rem),
+    rgba(16, 21, 26, .90);
+  box-shadow: 0 22px 65px rgba(0,0,0,.24);
+}
+.project-quickview-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+.project-quickview-top h2 {
+  margin: 4px 0 0;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  line-height: .96;
+}
+.project-quickview-close {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+}
+.project-quickview-close:hover { background: rgba(255,255,255,.075); }
+.project-quickview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  gap: clamp(22px, 4vw, 42px);
+  align-items: start;
+}
+.project-quickview-media { min-width: 0; }
+.project-quickview-main {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #090c0f;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.project-quickview-main img {
+  width: 100%;
+  display: block;
+  max-height: 62vh;
+  object-fit: contain;
+}
+.project-quickview-placeholder {
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+}
+.project-quickview-copy {
+  position: sticky;
+  top: 112px;
+}
+.project-quickview-copy .project-description {
+  margin-top: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.project-direct-link {
+  display: inline-flex;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: .92rem;
+}
+.project-direct-link:hover { color: var(--text); }
+.project-quickview-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.project-quickview-nav button {
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.035);
+  color: var(--text);
+  border-radius: 12px;
+  min-height: 42px;
+  padding: 0 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.project-quickview-nav button:first-child { justify-self: start; }
+.project-quickview-nav button:last-child { justify-self: end; }
+.project-quickview-nav button:hover:not(:disabled) { background: rgba(255,255,255,.075); }
+.project-quickview-nav button:disabled { opacity: .28; cursor: default; }
+.project-quickview-nav span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.project-card.is-selected {
+  border-color: rgba(255,122,26,.55);
+  box-shadow: 0 0 0 1px rgba(255,122,26,.16);
+}
+button.project-open {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .project-quickview-layout { grid-template-columns: 1fr; }
+  .project-quickview-copy { position: static; }
+}
+@media (max-width: 620px) {
+  .project-quickview { margin-bottom: 24px; }
+  .project-quickview-card { border-radius: 18px; padding: 18px; }
+  .project-quickview-top h2 { font-size: clamp(1.8rem, 10vw, 3rem); }
+  .project-quickview-nav { grid-template-columns: 1fr 1fr; }
+  .project-quickview-nav span { grid-column: 1 / -1; grid-row: 1; justify-self: center; }
+  .project-quickview-nav button:first-child { grid-column: 1; grid-row: 2; }
+  .project-quickview-nav button:last-child { grid-column: 2; grid-row: 2; }
+}
