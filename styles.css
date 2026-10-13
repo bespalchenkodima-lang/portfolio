@@ -67,6 +67,20 @@ button { color: inherit; }
 
 .brand span { color: var(--accent); }
 
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.brand-logo img {
+  display: block;
+  width: auto;
+  height: 54px;
+  max-width: 190px;
+  object-fit: contain;
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -1203,6 +1217,11 @@ body {
 }
 
 @media (max-width: 700px) {
+  .brand-logo img {
+    height: 44px;
+    max-width: 154px;
+  }
+
   .dev-code-copy {
     font-size: 10px;
   }
