@@ -81,6 +81,12 @@ button { color: inherit; }
   object-fit: contain;
 }
 
+.brand-logo-fallback {
+  font-weight: 900;
+  letter-spacing: .08em;
+  font-size: 1.05rem;
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -1186,7 +1192,6 @@ input[type="file"] {
 }
 
 /* Keep the animated layer behind the actual site. */
-body > .site-header,
 body > main,
 body > .footer,
 body > .modal {
@@ -1194,8 +1199,19 @@ body > .modal {
   z-index: 1;
 }
 
+/* Header must remain available while scrolling.
+   This intentionally comes after the animated-background rules so it is not
+   accidentally reset to position: relative. */
 body > .site-header {
+  position: sticky;
+  top: 0;
   z-index: 40;
+}
+
+/* Anchor links should stop below the sticky navigation bar. */
+section[id],
+main[id] {
+  scroll-margin-top: 92px;
 }
 
 body > .modal {
