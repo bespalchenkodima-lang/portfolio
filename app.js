@@ -78,22 +78,30 @@
         </div>
       </article>
     `).join("");
-    grid.querySelectorAll("[data-project-id]").forEach((card) => card.addEventListener("click", () => {
-      const project = allProjects.find((p) => p.id === card.dataset.projectId);
-      if (project) openProject(project);
-    }));
+    grid.querySelectorAll("[data-project-id]").forEach((card) => {
+      const openButton = card.querySelector(".project-open");
+      if (!openButton) return;
+      openButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const projectId = String(card.dataset.projectId || "");
+        const project = allProjects.find((p) => String(p.id) === projectId);
+        if (project) openProject(project);
+      });
+    });
   }
 
   function openProject(project) {
-    const gallery = [project.cover_url, ...(project.gallery_urls || [])].filter(Boolean);
+    if (!project || !modal || !modalContent) return;
+    const gallery = [project.cover_url, ...(Array.isArray(project.gallery_urls) ? project.gallery_urls : [])].filter(Boolean);
     modalContent.innerHTML = `
       <div class="modal-project">
         <p class="eyebrow">PROJECT</p>
         <h2>${escapeHtml(project.title)}</h2>
         <div class="modal-tags tags">${(project.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
         ${gallery.length ? `
-          <div class="gallery-main"><img id="gallery-main-image" src="${escapeHtml(gallery[0])}" alt="${escapeHtml(project.title)}"></div>
-          <div class="gallery-thumbs">${gallery.map((url, i) => `<button class="gallery-thumb ${i === 0 ? "active" : ""}" data-image="${escapeHtml(url)}" type="button"><img src="${escapeHtml(url)}" alt=""></button>`).join("")}</div>
+          <div class="gallery-main"><img id="gallery-main-image" src="${escapeHtml(gallery[0])}" alt="${escapeHtml(project.title)}" decoding="async"></div>
+          <div class="gallery-thumbs">${gallery.map((url, i) => `<button class="gallery-thumb ${i === 0 ? "active" : ""}" data-image="${escapeHtml(url)}" type="button"><img src="${escapeHtml(url)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
         ` : ""}
         <div class="project-description">${(project.description || project.short_description || "").split("\n").filter(Boolean).map((line) => `<p>${escapeHtml(line)}</p>`).join("")}</div>
       </div>`;
@@ -114,6 +122,7 @@
     modal.classList.add("hidden");
     modal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
+    if (modalContent) modalContent.innerHTML = "";
   }
   document.querySelectorAll("[data-close-modal]").forEach((el) => el.addEventListener("click", closeModal));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });

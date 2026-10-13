@@ -435,16 +435,19 @@ h2 {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.78);
-  backdrop-filter: blur(10px);
+  background: rgba(4,6,8,.90);
+  /* Full-screen backdrop blur over the animated code background was GPU-heavy. */
+  backdrop-filter: none;
 }
 
 .modal-panel {
   position: relative;
   z-index: 1;
   width: min(980px, 100%);
-  max-height: 92vh;
+  max-height: 90vh;
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   border-radius: 24px;
   border: 1px solid var(--line);
   background: #0f1318;
@@ -453,9 +456,9 @@ h2 {
 }
 
 .modal-close {
-  position: sticky;
-  top: 0;
-  float: right;
+  position: absolute;
+  top: 18px;
+  right: 18px;
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -1254,4 +1257,26 @@ body {
   .dev-code-glow {
     animation: none !important;
   }
+}
+
+
+/* Project modal stability/performance */
+.modal-open .dev-code-track,
+.modal-open .dev-code-glow {
+  animation-play-state: paused !important;
+}
+
+.modal-panel {
+  isolation: isolate;
+}
+
+.modal-project {
+  padding-right: 44px;
+}
+
+@media (max-width: 700px) {
+  .modal { padding: 10px; align-items: start; }
+  .modal-panel { margin-top: 10px; padding: 24px 18px; max-height: calc(100dvh - 20px); }
+  .modal-project { padding-right: 34px; }
+  .modal-close { top: 10px; right: 10px; }
 }
