@@ -74,58 +74,11 @@
           <div class="tags">${(project.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
           <h3>${escapeHtml(project.title)}</h3>
           <p>${escapeHtml(project.short_description || "")}</p>
-          <button class="project-open" type="button">Подробнее →</button>
+          <a class="project-open" href="project.html?id=${encodeURIComponent(String(project.id))}">Подробнее →</a>
         </div>
       </article>
     `).join("");
-    grid.querySelectorAll("[data-project-id]").forEach((card) => {
-      const openButton = card.querySelector(".project-open");
-      if (!openButton) return;
-      openButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        const projectId = String(card.dataset.projectId || "");
-        const project = allProjects.find((p) => String(p.id) === projectId);
-        if (project) openProject(project);
-      });
-    });
   }
-
-  function openProject(project) {
-    if (!project || !modal || !modalContent) return;
-    const gallery = [project.cover_url, ...(Array.isArray(project.gallery_urls) ? project.gallery_urls : [])].filter(Boolean);
-    modalContent.innerHTML = `
-      <div class="modal-project">
-        <p class="eyebrow">PROJECT</p>
-        <h2>${escapeHtml(project.title)}</h2>
-        <div class="modal-tags tags">${(project.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
-        ${gallery.length ? `
-          <div class="gallery-main"><img id="gallery-main-image" src="${escapeHtml(gallery[0])}" alt="${escapeHtml(project.title)}" decoding="async"></div>
-          <div class="gallery-thumbs">${gallery.map((url, i) => `<button class="gallery-thumb ${i === 0 ? "active" : ""}" data-image="${escapeHtml(url)}" type="button"><img src="${escapeHtml(url)}" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
-        ` : ""}
-        <div class="project-description">${(project.description || project.short_description || "").split("\n").filter(Boolean).map((line) => `<p>${escapeHtml(line)}</p>`).join("")}</div>
-      </div>`;
-    modal.classList.remove("hidden");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-    const mainImage = document.getElementById("gallery-main-image");
-    modalContent.querySelectorAll("[data-image]").forEach((btn) => btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (mainImage) mainImage.src = btn.dataset.image;
-      modalContent.querySelectorAll(".gallery-thumb").forEach((x) => x.classList.remove("active"));
-      btn.classList.add("active");
-    }));
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.add("hidden");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
-    if (modalContent) modalContent.innerHTML = "";
-  }
-  document.querySelectorAll("[data-close-modal]").forEach((el) => el.addEventListener("click", closeModal));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
   async function loadProjects() {
     if (!grid) return;

@@ -15,7 +15,10 @@
 <body data-project-page="all">
   <header class="site-header">
     <div class="container nav-wrap">
-      <a class="brand" href="index.html">DD-DEV<span>.</span></a>
+      <a class="brand brand-logo" href="index.html" aria-label="DD-DEV — на главную">
+        <img src="assets/logo.png" alt="DD-DEV" onerror="this.hidden=true; this.nextElementSibling.hidden=false;" />
+        <span class="brand-logo-fallback" hidden>DD-DEV</span>
+      </a>
       <nav class="nav">
         <a href="index.html#projects">Работы</a>
         <a href="index.html#services">Услуги</a>
@@ -58,14 +61,6 @@
       <a href="index.html">← На главную</a>
     </div>
   </footer>
-
-  <div id="project-modal" class="modal hidden" aria-hidden="true">
-    <div class="modal-backdrop" data-close-modal></div>
-    <div class="modal-panel">
-      <button class="modal-close" data-close-modal aria-label="Закрыть">×</button>
-      <div id="modal-content"></div>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
